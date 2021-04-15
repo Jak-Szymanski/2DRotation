@@ -16,6 +16,7 @@
 #include "example.h"
 #include "vector.hh"
 #include "matrix.hh"
+#include "rectangle.hh"
 #include "../include/lacze_do_gnuplota.hh"
 
 /*!
@@ -106,7 +107,25 @@ bool PrzykladZapisuWspolrzednychDoPliku( const char  *sNazwaPliku,
   return !StrmPlikowy.fail();
 }
 
+
+
 int main() {
+       Rectangle Rec;
+/*        std::cout << "Prostokąt: " << std::endl;
+       std::cout << Rec << std::endl;  */
+       double Tab[4][SIZE] = {{100.0, 100.0},{100.0, 200.0},{200.0, 200.0},{200.0, 100.0}};
+       Rec = Rectangle(Tab);
+/*        std::cout << "Prostokąt: " << std::endl;
+       std::cout << Rec << std::endl; */      
+
+
+
+
+
+
+
+
+
   std::cout << "Project Rotation 2D based on C++ Boiler Plate v"
             << PROJECT_VERSION_MAJOR /*duże zmiany, najczęściej brak kompatybilności wstecz */
             << "."
@@ -118,7 +137,7 @@ int main() {
             << std::endl;
   // std::system("cat ../LICENSE");
   // do zadania Rotacja 2D
-  std::cout << "Vector:" << std::endl;
+  std::cout << "Vector" << std::endl;
   Vector tmpV1 = Vector();
   std::cout << "Vector - konstruktor bezparametryczny:\n" << tmpV1 << std::endl;
   double argumentsV[] = {1.0, 2.0};
@@ -168,6 +187,12 @@ int main() {
   std::cout << "Naciśnij ENTER, aby kontynuowac" << std::endl;
   std::cin.ignore(100000,'\n');
 
+
+       std::cout << Rec << std::endl;
+       if(!SaveRecToFile("../datasets/prostokat.dat", Rec)) return 1;
+       Lacze.Rysuj();
+         std::cout << "Naciśnij ENTER, aby kontynuowac" << std::endl;
+        std::cin.ignore(100000,'\n');
   // Z bazy projektu-wydmuszki Boiler Plate C++:
   // Bring in the dummy class from the example source,
   // just to show that it is accessible from main.cpp.
