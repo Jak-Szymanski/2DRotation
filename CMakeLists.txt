@@ -40,9 +40,14 @@ find_lto(CXX)
 set(SOURCES          # All .cpp files in src/
     src/example.cpp
     src/lacze_do_gnuplota
+    src/vector.cpp
+    src/rectangle.cpp
+    src/matrix.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
-    tests/main.cpp
+    tests/vector.cpp
+    tests/matrix.cpp
+    tests/rectangle.cpp
 )
 set(LIBRARY_NAME program)  # Default name for the library built from src/*.cpp (change if you wish)
 
