@@ -157,6 +157,34 @@ Matrix Matrix::Rotation(double degrees){
     return *this;
 }
 
+
+double Matrix::detGauss(Matrix mat){
+    double ratio, det=1;
+    int i,j,k;
+    for(i=0;i<=SIZE-2;i++)
+        {
+            if(mat(i, j) == 0.0)
+            {
+                std::cout<<"Mathematical Error!";
+                exit(0);
+            }
+            for(j=i+1;j<=SIZE-1;j++)
+            {
+                ratio = mat(j, i)/mat(i, i);
+
+                for(k=0;k<=SIZE;k++)
+                {
+                        mat(j, k) -= ratio * mat(i, k);
+                }
+            }
+        }
+
+    for(i=0;i<=SIZE;i++){
+        det *= mat(i, i);
+    }
+
+    return det;
+}
 /******************************************************************************
  |  Przeciazenie operatora >>                                                 |
  |  Argumenty:                                                                |

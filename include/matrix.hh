@@ -30,6 +30,8 @@ public:
     bool operator == (const Matrix &mat) const;
 
     Matrix Rotation(double degrees);
+
+    double detGauss(Matrix mat);
 };
 
 std::istream &operator>>(std::istream &in, Matrix &mat);
