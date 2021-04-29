@@ -21,7 +21,7 @@ Vector::Vector() {
 
 
 /******************************************************************************
- |  Konstruktor klasy Vector.                                                 |
+ |  Konstruktor parametryczny klasy Vector.                                   |
  |  Argumenty:                                                                |
  |      tmp - Jednowymiarowa tablica typu double.                             |
  |  Zwraca:                                                                   |
@@ -34,6 +34,14 @@ Vector::Vector(double tmp[SIZE]) {
     }
 }
 
+
+/******************************************************************************
+ |  Konstruktor parametryczny klasy Vector.                                   |
+ |  Argumenty:                                                                |
+ |      v - Wektor                                                            |
+ |  Zwraca:                                                                   |
+ |      Tablice wypelniona wartosciami podanymi w argumencie.                 |
+ */
 
 Vector::Vector(const Vector &v){
     for (int i = 0; i < SIZE; ++i){
@@ -110,6 +118,9 @@ Vector Vector::operator * (const double &tmp) {
 Vector Vector::operator / (const double &tmp) {
     Vector result;
 
+    if (tmp == 0){
+        throw std::runtime_error("Błąd - dzielenie przez zero \n");
+    }
     for (int i = 0; i < SIZE; ++i) {
         result[i] = size[i] / tmp;
     }
@@ -117,6 +128,15 @@ Vector Vector::operator / (const double &tmp) {
     return result;
 }
 
+/******************************************************************************
+ |  Realizuje przypisanie wartości jednego wektora do drugiego                |
+ |  Argumenty:                                                                |
+ |      this - wektor do którego wartość będzie wpisana,                      |
+ |      v - wektor z którego wartość będzie przypisana,                       |
+ |  Zwraca:                                                                   |
+ |      Gotowy wektor po przypisaniu jako wskaznik                            |
+ |      na parametr                                                           | 
+ */
 
 Vector Vector::operator = (const Vector &v){
     for (int i = 0; i < SIZE; ++i){
@@ -133,12 +153,37 @@ Vector Vector::operator = (const Vector &v){
  |  Zwraca:                                                                   |
  |      Wartosc wektora w danym miejscu tablicy jako stala.                   |
  */
+
 const double &Vector::operator [] (int index) const {
     if (index < 0 || index >= SIZE) {
-        std::cerr << "Error: Wektor jest poza zasiegiem!" << std::endl;
-    } // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Wektor jest poza zasiegiem! \n");
+    } 
     return size[index];
 }
+
+
+/******************************************************************************
+ |  Funktor wektora.                                                          |
+ |  Argumenty:                                                                |
+ |      index - index wektora.                                                |
+ |  Zwraca:                                                                   |
+ |      Wartosc wektora w danym miejscu tablicy.                              |
+ */
+
+double &Vector::operator[](int index) {
+    return const_cast<double &>(const_cast<const Vector *>(this)->operator[](index));
+}
+
+
+/******************************************************************************
+ |  Porównanie wektorów                                                       |
+ |  Argumenty:                                                                |
+ |      this -pierwszy składnik porównania                                    |
+ |      v - drugi składnik porównania                                         |
+ |  Zwraca:                                                                   |
+ |      1 - jeżeli te wektory są takie same                                   |
+ |      0 - jeżeli te wektory są sobie różne                                  |    
+ */
 
 bool Vector::operator == (const Vector &v) const{
     for (int i = 0; i < SIZE; ++i){
@@ -151,16 +196,13 @@ bool Vector::operator == (const Vector &v) const{
 
 
 /******************************************************************************
- |  Funktor wektora.                                                          |
+ |  Obliczanie odległości między dwoma punktami (wektorami)                   |
  |  Argumenty:                                                                |
- |      index - index wektora.                                                |
+ |      v1 - pierwszy punkt (wektor)                                          |
+ |      v2 - drugi punkt (wektor)                                             |
  |  Zwraca:                                                                   |
- |      Wartosc wektora w danym miejscu tablicy.                              |
+ |      Odległośc między tymi dwoma punktami jako double                      |
  */
-double &Vector::operator[](int index) {
-    return const_cast<double &>(const_cast<const Vector *>(this)->operator[](index));
-}
-
 
 double Distance (const Vector v1, const Vector v2){
 

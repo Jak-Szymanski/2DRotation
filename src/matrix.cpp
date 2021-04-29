@@ -42,12 +42,40 @@ Matrix::Matrix(double tmp[SIZE][SIZE]) {
 }
 
 
+/******************************************************************************
+ |  Konstruktor parametryczny klasy Matrix.                                   |
+ |  Argumenty:                                                                |
+ |      mat - Macierz                                                         |
+ |  Zwraca:                                                                   |
+ |      Macierz wypelniona wartosciami podanymi w argumencie.                 |
+ */
+
 Matrix::Matrix(const Matrix &mat){
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             value[i][j] = mat(i, j);
         }
     }    
+}
+
+
+/******************************************************************************
+ |  Przeciążenie dodawania macierzy                                           |
+ |  Argumenty:                                                                |
+ |      this - macierz, czyli pierwszy skladnik dodawania,                    |
+ |      v - wektor, czyli drugi skladnik dodawania.                           |
+ |  Zwraca:                                                                   |
+ |      Macierz - iloczyn dwóch podanych macierzy.                            |
+ */
+
+Matrix Matrix::operator + (Matrix tmp) {
+    Matrix result;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            result(i, j) = this->value[i][j] + tmp(i, j);
+        }
+    }
+    return result;
 }
 
 
@@ -79,16 +107,15 @@ Vector Matrix::operator * (Vector tmp) {
  |  Zwraca:                                                                   |
  |      Wartosc macierzy w danym miejscu tablicy.                             |
  */
+
 double &Matrix::operator()(unsigned int row, unsigned int column) {
 
     if (row >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem"; 
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     return value[row][column];
@@ -106,36 +133,26 @@ double &Matrix::operator()(unsigned int row, unsigned int column) {
 const double &Matrix::operator () (unsigned int row, unsigned int column) const {
 
     if (row >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     return value[row][column];
 }
 
-/******************************************************************************
- |  Przeciążenie dodawania macierzy                                                          |
- |  Argumenty:                                                                |
- |      this - macierz, czyli pierwszy skladnik dodawania,                     |
- |      v - wektor, czyli drugi skladnik dodawania.                                               |
- |  Zwraca:                                                                   |
- |      Macierz - iloczyn dwóch podanych macierzy.                  |
- */
-Matrix Matrix::operator + (Matrix tmp) {
-    Matrix result;
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            result(i, j) = this->value[i][j] + tmp(i, j);
-        }
-    }
-    return result;
-}
 
+/******************************************************************************
+ |  Porównanie macierzy                                                       |
+ |  Argumenty:                                                                |
+ |      this -pierwszy składnik porównania                                    |
+ |      v - drugi składnik porównania                                         |
+ |  Zwraca:                                                                   |
+ |      1 - jeżeli te macierze są takie same                                  |
+ |      0 - jeżeli te macierze są sobie różne                                 |    
+ */
 
 bool Matrix::operator == (const Matrix &mat) const {
     for (int i = 0; i < SIZE; ++i) {
@@ -148,6 +165,16 @@ bool Matrix::operator == (const Matrix &mat) const {
     return 1;
 }
 
+
+/******************************************************************************
+ |  Wyznaczanie macierzy obrotu                                               |
+ |  Argumenty:                                                                |
+ |      this - zwracana macierz                                               |
+ |      degrees - kąt w stopniach                                             |
+ |  Zwraca:                                                                   |
+ |      Macierz obrotu o dany kąt jako wskaźnik na parametr                   |  
+ */
+
 Matrix Matrix::Rotation(double degrees){
     double radians = degrees * (PI /180);
     this->value[0][0] = this->value[1][1] = cos(radians);
@@ -158,39 +185,53 @@ Matrix Matrix::Rotation(double degrees){
 }
 
 
-double Matrix::detGauss(Matrix mat){
+/******************************************************************************
+ |  Obliczanie wyznacznika macierzy metodą eliminacji Gaussa                  |
+ |  Argumenty:                                                                |
+ |      this - dana macierz                                                   |
+ |  Zwraca:                                                                   |
+ |      Wartość wyznacznika podanej macierzy jako double                      |
+ |   UWAGA :                                                                  |
+ |      Ta metoda nie działa jeżeli któraś z komórek na głównej przekątnej    |
+ |      ma wartość 0                                                          |
+ */
+
+double Matrix::detGauss(){
     double ratio, det=1;
     int i,j,k;
+    j = 0;
     for(i=0;i<=SIZE-2;i++)
         {
-            if(mat(i, j) == 0.0)
+            if(value[i][j] == 0.0)
             {
-                std::cout<<"Mathematical Error!";
-                exit(0);
+                throw std::runtime_error("Danej macierzy nie można policzyć tą metodą \n");
             }
             for(j=i+1;j<=SIZE-1;j++)
             {
-                ratio = mat(j, i)/mat(i, i);
+                ratio = value[j][i]/value[i][i];
 
-                for(k=0;k<=SIZE;k++)
+                for(k=0;k<=SIZE-1;k++)
                 {
-                        mat(j, k) -= ratio * mat(i, k);
+                        value[j][k] -= ratio * value[i][k];
                 }
             }
         }
 
-    for(i=0;i<=SIZE;i++){
-        det *= mat(i, i);
+    for(i=0;i<=SIZE-1;i++){
+        det *= value[i][i];
     }
 
     return det;
 }
+
+
 /******************************************************************************
  |  Przeciazenie operatora >>                                                 |
  |  Argumenty:                                                                |
  |      in - strumien wyjsciowy,                                              |
  |      mat - macierz.                                                         |
  */
+
 std::istream &operator>>(std::istream &in, Matrix &mat) {
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
@@ -207,6 +248,7 @@ std::istream &operator>>(std::istream &in, Matrix &mat) {
  |      out - strumien wejsciowy,                                             |
  |      mat - macierz.                                                        |
  */
+
 std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {

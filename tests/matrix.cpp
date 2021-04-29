@@ -22,7 +22,17 @@ TEST_CASE("Konstruktor parametryczny - matrix"){
   CHECK(x == y);
 }
 
-TEST_CASE("Mnożenie vector * matrix"){
+TEST_CASE("Dodawanie"){
+
+  double Tx[SIZE][SIZE] = {{1.5,-1},{5,0}};
+  double Ty[SIZE][SIZE] = {{-0.5,-3},{2,-1}};
+  double Tz[SIZE][SIZE] = {{1,-4},{7,-1}};
+  Matrix x(Tx), y(Ty), z(Tz);
+
+  CHECK(z == x + y);
+}
+
+TEST_CASE("Mnożenie matrix * vector"){
 
   double Tv[SIZE] = {1,2};
   double Tm[SIZE][SIZE] = {{0,-1},{4,2}};
@@ -33,14 +43,64 @@ TEST_CASE("Mnożenie vector * matrix"){
   CHECK(r == m * v);
 }
 
-TEST_CASE("Dodawanie"){
+TEST_CASE("Operator ()"){
 
-  double Tx[SIZE][SIZE] = {{1.5,-1},{5,0}};
-  double Ty[SIZE][SIZE] = {{-0.5,-3},{2,-1}};
-  double Tz[SIZE][SIZE] = {{1,-4},{7,-1}};
-  Matrix x(Tx), y(Ty), z(Tz);
+  double Tx[SIZE][SIZE] = {{4,5},{-7,0}};
+  Matrix x(Tx);
 
-  CHECK(z == x + y);
+  CHECK(x(1, 0) == -7);
+}
+
+TEST_CASE("Operator () - wiersz poza zasięgiem na plus"){
+
+  double Tx[SIZE][SIZE] = {{4,5},{-7,0}};
+  Matrix x(Tx);
+
+  WARN_THROWS(x(SIZE, 0));
+}
+
+TEST_CASE("Operator () - wiersz poza zasięgiem na minus"){
+
+  double Tx[SIZE][SIZE] = {{4,5},{-7,0}};
+  Matrix x(Tx);
+
+  WARN_THROWS(x(-1, 0));
+}
+
+TEST_CASE("Operator () - kolumna poza zasięgiem na plus"){
+
+  double Tx[SIZE][SIZE] = {{4,5},{-7,0}};
+  Matrix x(Tx);
+
+  WARN_THROWS(x(1, SIZE));
+}
+
+TEST_CASE("Operator () - kolumna poza zasięgiem na minus"){
+
+  double Tx[SIZE][SIZE] = {{4,5},{-7,0}};
+  Matrix x(Tx);
+
+  WARN_THROWS(x(1, -1));
+}
+
+TEST_CASE("Porownanie - minimalnie nierowne"){
+  
+  double Tx[SIZE][SIZE] = {{1,1},{1,1}};
+  double Ty[SIZE][SIZE] = {{1,1},{1.01,1}};
+
+  Matrix x(Tx), y(Ty);
+
+  CHECK(!(x == y));
+}
+
+TEST_CASE("Porownanie - minimalnie rowne"){
+  
+  double Tx[SIZE][SIZE] = {{1,1},{1,1}};
+  double Ty[SIZE][SIZE] = {{1,1},{1.009,1}};
+
+  Matrix x(Tx), y(Ty);
+
+  CHECK(x == y);
 }
 
 TEST_CASE("Macierz obrotu 0 stopni"){
@@ -65,24 +125,22 @@ TEST_CASE("Macierz obrotu 90 stopni"){
   CHECK(x == y);
 }
 
-TEST_CASE("Porownanie - minimalnie nierowne"){
-  
-  double Tx[SIZE][SIZE] = {{1,1},{1,1}};
-  double Ty[SIZE][SIZE] = {{1,1},{1.01,1}};
+TEST_CASE("Obliczanie wyznacznika metodą Gaussa - przykładowa macierz"){
 
-  Matrix x(Tx), y(Ty);
+  double Tx[SIZE][SIZE] = {{1, -2},{-4, 5}};
+  Matrix x(Tx);
 
-  CHECK(!(x == y));
+  double det = x.detGauss();
+
+  CHECK(det == -3);
 }
 
-TEST_CASE("Porownanie - minimalnie rowne"){
-  
-  double Tx[SIZE][SIZE] = {{1,1},{1,1}};
-  double Ty[SIZE][SIZE] = {{1,1},{1.009,1}};
+TEST_CASE("Obliczanie wyznacznika metodą Gaussa - błąd"){
 
-  Matrix x(Tx), y(Ty);
+  double Tx[SIZE][SIZE] = {{0, -2},{-4, 5}};
+  Matrix x(Tx);
 
-  CHECK(x == y);
+  WARN_THROWS(x.detGauss());
 }
 
 TEST_CASE("Wyświetlanie"){

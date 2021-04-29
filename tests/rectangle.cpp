@@ -22,6 +22,66 @@ TEST_CASE("Konstruktor parametryczny - rectangle"){
   CHECK(x == y);
 }
 
+TEST_CASE("Operator () "){
+
+  double Ty[4][SIZE] = {{4,5},{-7,0},{4,5},{-7,0}};
+  Rectangle y(Ty);
+
+  CHECK(y(2,0) == 4);
+}
+
+TEST_CASE("Operator () - wiersz poza zasięgiem na plus"){
+
+  double Ty[4][SIZE] = {{4,5},{-7,0},{4,5},{-7,0}};
+  Rectangle y(Ty);
+
+  WARN_THROWS(y(5,0));
+}
+
+TEST_CASE("Operator () - wiersz poza zasięgiem na minus"){
+
+  double Ty[4][SIZE] = {{4,5},{-7,0},{4,5},{-7,0}};
+  Rectangle y(Ty);
+
+  WARN_THROWS(y(-1,0));
+}
+
+TEST_CASE("Operator () - kolumna poza zasięgiem na plus"){
+
+  double Ty[4][SIZE] = {{4,5},{-7,0},{4,5},{-7,0}};
+  Rectangle y(Ty);
+
+  WARN_THROWS(y(2, SIZE));
+}
+
+TEST_CASE("Operator () - kolumna poza zasięgiem na minus"){
+
+  double Ty[4][SIZE] = {{4,5},{-7,0},{4,5},{-7,0}};
+  Rectangle y(Ty);
+
+  WARN_THROWS(y(2, -1));
+}
+
+TEST_CASE("Porownanie - minimalnie nierowne"){
+  
+  double Tx[4][SIZE] = {{1,1},{1,1},{1,1},{1,1}};
+  double Ty[4][SIZE] = {{1,1},{1.01,1},{1,1},{1,1}};
+
+  Matrix x(Tx), y(Ty);
+
+  CHECK(!(x == y));
+}
+
+TEST_CASE("Porownanie - minimalnie rowne"){
+  
+  double Tx[4][SIZE] = {{1,1},{1,1},{1,1},{1,1}};
+  double Ty[4][SIZE] = {{1,1},{1.009,1},{1,1},{1,1}};
+
+  Matrix x(Tx), y(Ty);
+
+  CHECK(x == y);
+}
+
 TEST_CASE("Obrót 0 stopni 10 razy"){
 
   double Tx[4][SIZE] = {{1,1},{1,2},{2,2},{2,1}};
@@ -39,6 +99,17 @@ TEST_CASE("Obrót 90 stopni"){
   Rectangle x(Tx), y(Ty);
 
   x.Rotate(90, 1);
+
+  CHECK(x == y);
+}
+
+TEST_CASE("Obrót 9 stopni 10 razy"){
+
+  double Tx[4][SIZE] = {{1,1},{1,2},{2,2},{2,1}};
+  double Ty[4][SIZE] = {{-1,1},{-2,1},{-2,2},{-1,2}};
+  Rectangle x(Tx), y(Ty);
+
+  x.Rotate(9, 10);
 
   CHECK(x == y);
 }

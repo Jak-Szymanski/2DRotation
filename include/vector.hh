@@ -36,7 +36,7 @@ public:
 
 };
 
-    double Distance (const Vector v1, const Vector v2);
+double Distance (const Vector v1, const Vector v2);
 
 std::ostream &operator << (std::ostream &out, Vector const &tmp);
 

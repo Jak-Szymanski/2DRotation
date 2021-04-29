@@ -7,6 +7,13 @@
 #include <fstream> 
 #define MIN_DIFF  0.01
 
+/******************************************************************************
+ |  Konstruktor klasy Rectangle.                                              |
+ |  Argumenty:                                                                |
+ |      Brak argumentow.                                                      |
+ |  Zwraca:                                                                   |
+ |      Prostokąt wypelniony wartoscia 0.                                     |
+ */
 
 Rectangle::Rectangle(){
   for(int i=0; i<4; i++){
@@ -16,6 +23,13 @@ Rectangle::Rectangle(){
   }
 }
 
+/******************************************************************************
+ |  Konstruktor parametryczny klasy Rectangle.                                |
+ |  Argumenty:                                                                |
+ |      rec - prostokąt                                                       |
+ |  Zwraca:                                                                   |
+ |      Prostokąt wypelniony wartosciami podanymi w argumencie.               |
+ */
 
 Rectangle::Rectangle(const Rectangle &rec){
   for(int i=0; i<4; i++){
@@ -26,6 +40,13 @@ Rectangle::Rectangle(const Rectangle &rec){
 }
 
 
+/******************************************************************************
+ |  Konstruktor parametryczny klasy Rectangle.                                |
+ |  Argumenty:                                                                |
+ |      tmp - dwuwymiarowa tablica z elementami typu double.                  |
+ |  Zwraca:                                                                   |
+ |      Prostokąt wypelniony wartosciami podanymi w argumencie.               |
+ */
 
 Rectangle::Rectangle(double tmp[4][SIZE]) {
   for (int i = 0; i < 4; ++i) {
@@ -36,36 +57,61 @@ Rectangle::Rectangle(double tmp[4][SIZE]) {
 }
 
 
+/******************************************************************************
+ |  Funktor Prostokąta                                                        |
+ |  Argumenty:                                                                |
+ |      row - numer wiersza (który punkt).                                    |
+ |      column - numer kolumny (które współrzędne punktu).                    |
+ |  Zwraca:                                                                   |
+ |      Wartosc w danym miejscu tablicy jako stała.                           |
+ */
+
 const double &Rectangle::operator () (unsigned int row, unsigned int column) const {
 
     if (row >= 4) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+      throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+      throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     return Points[row][column];
 }
 
+
+/******************************************************************************
+ |  Funktor Prostokąta                                                        |
+ |  Argumenty:                                                                |
+ |      row - numer wiersza (który punkt).                                    |
+ |      column - numer kolumny (które współrzędne punktu).                    |
+ |  Zwraca:                                                                   |
+ |      Wartosc w danym miejscu tablicy.                                      |
+ */
 
 double &Rectangle::operator () (unsigned int row, unsigned int column){
 
     if (row >= 4) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
-        exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
+        throw std::runtime_error("Error: Macierz jest poza zasiegiem \n");
     }
 
     return Points[row][column];
 }
+
+
+/******************************************************************************
+ |  Porównanie prostokątów                                                    |
+ |  Argumenty:                                                                |
+ |      this -pierwszy składnik porównania                                    |
+ |      v - drugi składnik porównania                                         |
+ |  Zwraca:                                                                   |
+ |      1 - jeżeli te prostokąty są takie same                                |
+ |      0 - jeżeli te prostokąt są sobie różne                                |    
+ */
 
 bool Rectangle::operator == (const Rectangle &rec) const{
   for(int i=0; i<4; i++){
@@ -79,40 +125,15 @@ bool Rectangle::operator == (const Rectangle &rec) const{
 }
 
 
-std::ostream &operator<<(std::ostream &out, Rectangle const &rec){
-  int i, j;
-  for(i=0; i<4; i++){
-    for(j=0; j<SIZE; j++){
-      out << std::setw(16) << std::fixed << std::setprecision(10) << rec(i, j) << "\t";
-    }
-    out << std::endl;
-  }
-  i=0;
-  for(j=0; j<SIZE; j++){
-      out << std::setw(16) << std::fixed << std::setprecision(10) << rec(i, j) << "\t";
-    }
-    out << std::endl;
-  return out;
-}
-
-
-bool SaveRecToFile(const char *FileName, Rectangle &Rec){
-       std::ofstream file;
-
-       file.open(FileName);
-       if (!file.is_open())  {
-              std::cerr << ":(  Operacja otwarcia do zapisu \"" << FileName << "\"" << std::endl
-	        << ":(  nie powiodla sie." << std::endl;
-       return false;
-  }
-
-  file << Rec;
-
-
-  file.close();
-  return !file.fail();
-}
-
+/******************************************************************************
+ |  Obrócenie prostokąta                                                      |
+ |  Argumenty:                                                                |
+ |      this - obracany prostokąt                                             |
+ |      degrees - kąt obrotu prostokąta                                       |
+ |      iterations - ile razy obrót ma zostać wykonany                        |
+ |  Zwraca:                                                                   |
+ |      Prostokąt po wykonaniu obrotów jako wskaźnik na parametr              |    
+ */
 
 Rectangle Rectangle::Rotate(double degrees, int iterations){
   Matrix MRotation;
@@ -126,6 +147,15 @@ Rectangle Rectangle::Rotate(double degrees, int iterations){
   return *this;
 }
 
+
+/******************************************************************************
+ |  Porównanie długości boków prostokąta                                      |
+ |  Argumenty:                                                                |
+ |      this - prostokąt                                                      |
+ |  Zwraca:                                                                   |
+ |      Nic ale wyświetli na standardowym wyjściu porównanie długości         |    
+ |      boków prostokąta                                                      |
+ */
 
 void Rectangle::CompareSides(){
   double a, b, c, d;
@@ -171,6 +201,15 @@ void Rectangle::CompareSides(){
 }
 
 
+/******************************************************************************
+ |  Przesunięcie prostokąta o dany wektor                                     |
+ |  Argumenty:                                                                |
+ |      this - prostokąt                                                      |
+ |      v - wektor                                                            |
+ |  Zwraca:                                                                   |
+ |      Prostokąt po przesunięciu jako wskaźnik na parametr                   |    
+ */
+
 Rectangle Rectangle::Move(Vector v){
 
   for(int i=0; i<4; i++){
@@ -178,4 +217,54 @@ Rectangle Rectangle::Move(Vector v){
   }
 
   return *this;
+}
+
+
+/******************************************************************************
+ |  Przeciazenie operatora <<                                                 |
+ |  Argumenty:                                                                |
+ |      out - strumien wejsciowy,                                             |
+ |      rec - prostokąt.                                                      |
+ */
+
+std::ostream &operator<<(std::ostream &out, Rectangle const &rec){
+  int i, j;
+  for(i=0; i<4; i++){
+    for(j=0; j<SIZE; j++){
+      out << std::fixed << std::setprecision(10) << rec(i, j) << "\t";
+    }
+    out << std::endl;
+  }
+  i=0;
+  for(j=0; j<SIZE; j++){
+      out << std::fixed << std::setprecision(10) << rec(i, j) << "\t";
+    }
+    out << std::endl;
+  return out;
+}
+
+
+/******************************************************************************
+ |  Zapisz prostokąt do pliku                                                 |
+ |  Argumenty:                                                                |
+ |      Filename - nazwa pliku                                                |
+ |      Rec - prostokąt.                                                      |
+ |  Zwraca:                                                                   |
+ |      1 - jeśli zapisanie odbędzie się pomyślnie                            |
+ |      0 - jeśli nie                                                         |
+ */
+
+bool SaveRecToFile(const char *FileName, Rectangle &Rec){
+       std::ofstream file;
+
+       file.open(FileName);
+       if (!file.is_open())  {
+              std::cerr << ":(  Operacja otwarcia do zapisu \"" << FileName << "\"" << std::endl
+	        << ":(  nie powiodla sie." << std::endl;
+       return false;
+  }
+
+  file << Rec;
+  file.close();
+  return !file.fail();
 }

@@ -19,9 +19,9 @@ public:
 
     Matrix(const Matrix &mat);
 
-    Vector operator * (Vector tmp);           // Operator mnożenia przez wektor
-
     Matrix operator + (Matrix tmp);
+
+    Vector operator * (Vector tmp);           // Operator mnożenia przez wektor
 
     double  &operator () (unsigned int row, unsigned int column);
     
@@ -31,7 +31,7 @@ public:
 
     Matrix Rotation(double degrees);
 
-    double detGauss(Matrix mat);
+    double detGauss();
 };
 
 std::istream &operator>>(std::istream &in, Matrix &mat);

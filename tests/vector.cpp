@@ -70,6 +70,50 @@ TEST_CASE("Dzielenie vector / double"){
   CHECK(x / y == z);
 }
 
+TEST_CASE("Dzielenie vector / zero"){
+
+  double Tx[SIZE] = {1,2};
+  double y = 0;
+
+  Vector x(Tx);
+
+  WARN_THROWS(x / y);
+}
+
+TEST_CASE("Przypisanie"){
+
+  double Tx[SIZE] = {1,2};
+  Vector x(Tx), y;
+
+  y = x;
+
+  CHECK(y == x);
+}
+
+TEST_CASE("Operator []"){
+
+  double Tx[SIZE] = {-2,0};
+  Vector x(Tx);
+
+  CHECK( x[0] == -2);
+}
+
+TEST_CASE("Operator [] - poza zasięgiem na plus"){
+
+  double Tx[SIZE] = {-2,0};
+  Vector x(Tx);
+
+  WARN_THROWS(x[SIZE]);
+}
+
+TEST_CASE("Operator [] - poza zasięgiem na minus"){
+
+  double Tx[SIZE] = {-2,0};
+  Vector x(Tx);
+
+  WARN_THROWS(x[-1]);
+}
+
 TEST_CASE("Porownanie - minimalnie nierowne"){
   
   double Tx[SIZE] = {1,1};
@@ -88,6 +132,25 @@ TEST_CASE("Porownanie - minimalnie rowne"){
   Vector x(Tx), y(Ty);
 
   CHECK(x == y);
+}
+
+TEST_CASE("Odległość między wektorami"){
+
+  double Tx[SIZE] = {1,1};
+  double Ty[SIZE] = {-2, 5};
+
+  Vector x(Tx), y(Ty);
+
+  CHECK(Distance(x, y) == 5);
+}
+
+TEST_CASE("Odległość między wektorami - zero"){
+
+  double Tx[SIZE] = {1,1};
+
+  Vector x(Tx), y(Tx);
+
+  CHECK(Distance(x, y) == 0);
 }
 
 TEST_CASE("Wyświetlanie"){
@@ -111,24 +174,4 @@ TEST_CASE("Wczytywanie"){
   in >> x;
 
   CHECK(x ==y);
-
 }
-
-/* TEST_CASE("Operator []"){
-
-  double Tx[SIZE] = {-2,0};
-  Vector x(Tx);
-
-  double d = x[0];
-  d++;    
-  CHECK( d == -1);
-}
-
-TEST_CASE("Operator [] const"){
-
-  double Tx[SIZE] = {-2,0};
-  Vector x(Tx);
-
-  const double d = x[0];
-  
-} */
