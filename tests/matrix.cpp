@@ -43,6 +43,35 @@ TEST_CASE("Mnożenie matrix * vector"){
   CHECK(r == m * v);
 }
 
+TEST_CASE("Mnożenie matrix * vector - zero"){
+
+  double Tm[SIZE][SIZE] = {{0,-1},{4,2}};
+  Vector v;
+  Matrix m(Tm);
+
+  CHECK(v == m * v);
+}
+
+TEST_CASE("Mnożenie matrix * matrix"){
+
+  double Tx[SIZE][SIZE] = {{2,-1},{5,0}};
+  double Ty[SIZE][SIZE] = {{0,-3},{2,-1}};
+  double Tz[SIZE][SIZE] = {{-2, -5},{0,-15}};
+  
+  Matrix x(Tx), y(Ty), z(Tz);
+
+  CHECK(x * y == z);
+}
+
+TEST_CASE("Mnożenie matrix * matrix"){
+
+  double Tx[SIZE][SIZE] = {{2,-1},{5,0}};
+  
+  Matrix x(Tx), y;
+
+  CHECK(x * y == y);
+}
+
 TEST_CASE("Operator ()"){
 
   double Tx[SIZE][SIZE] = {{4,5},{-7,0}};

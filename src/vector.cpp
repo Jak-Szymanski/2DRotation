@@ -90,7 +90,7 @@ Vector Vector::operator - (const Vector &v) {
  |  Realizuje mnozenie wektora przez liczbe zmiennoprzecinkowa.               |
  |  Argumenty:                                                                |
  |      this - pierwszy skladnik mnozenia (wektor),                           |
- |      v - drugi skladnik mnozenia (liczba typu double).                     |
+ |      tmp - drugi skladnik mnozenia (liczba typu double).                   |
  |  Zwraca:                                                                   |
  |      Iloczyn dwoch skladnikow przekazanych jako wskaznik                   |
  |      na parametr.                                                          |
@@ -109,7 +109,7 @@ Vector Vector::operator * (const double &tmp) {
  |  Realizuje dzielenie dwoch wektorow.                                       |
  |  Argumenty:                                                                |
  |      this - licznik dzielenia,                                             |
- |      v - mianownik dzielenia.                                              |
+ |      tmp - mianownik dzielenia.                                            |
  |  Zwraca:                                                                   |
  |      Iloraz dwoch skladnikow przekazanych jako wskaznik                    |
  |      na parametr.                                                          |
@@ -149,7 +149,7 @@ Vector Vector::operator = (const Vector &v){
 /******************************************************************************
  |  Funktor wektora.                                                          |
  |  Argumenty:                                                                |
- |      index - index wektora.                                                |
+ |      index - indeks wektora.                                               |
  |  Zwraca:                                                                   |
  |      Wartosc wektora w danym miejscu tablicy jako stala.                   |
  */
@@ -165,7 +165,7 @@ const double &Vector::operator [] (int index) const {
 /******************************************************************************
  |  Funktor wektora.                                                          |
  |  Argumenty:                                                                |
- |      index - index wektora.                                                |
+ |      index - indeks wektora.                                               |
  |  Zwraca:                                                                   |
  |      Wartosc wektora w danym miejscu tablicy.                              |
  */

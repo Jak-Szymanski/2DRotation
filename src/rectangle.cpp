@@ -107,7 +107,7 @@ double &Rectangle::operator () (unsigned int row, unsigned int column){
  |  Porównanie prostokątów                                                    |
  |  Argumenty:                                                                |
  |      this -pierwszy składnik porównania                                    |
- |      v - drugi składnik porównania                                         |
+ |      rec - drugi składnik porównania                                       |
  |  Zwraca:                                                                   |
  |      1 - jeżeli te prostokąty są takie same                                |
  |      0 - jeżeli te prostokąt są sobie różne                                |    

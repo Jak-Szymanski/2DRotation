@@ -62,8 +62,8 @@ Matrix::Matrix(const Matrix &mat){
 /******************************************************************************
  |  Przeciążenie dodawania macierzy                                           |
  |  Argumenty:                                                                |
- |      this - macierz, czyli pierwszy skladnik dodawania,                    |
- |      v - wektor, czyli drugi skladnik dodawania.                           |
+ |      this - pierwszy skladnik dodawania,                                   |
+ |      tmp - drugi skladnik dodawania.                                       |
  |  Zwraca:                                                                   |
  |      Macierz - iloczyn dwóch podanych macierzy.                            |
  */
@@ -83,7 +83,7 @@ Matrix Matrix::operator + (Matrix tmp) {
  |  Realizuje mnozenie macierzy przez wektor.                                 |
  |  Argumenty:                                                                |
  |      this - macierz, czyli pierwszy skladnik mnozenia,                     |
- |      v - wektor, czyli drugi skladnik mnozenia.                            |
+ |      tmp - wektor, czyli drugi skladnik mnozenia.                            |
  |  Zwraca:                                                                   |
  |      Iloczyn dwoch skladnikow przekazanych jako wektor.                    |
  */
@@ -95,6 +95,29 @@ Vector Matrix::operator * (Vector tmp) {
             result[i] += value[i][j] * tmp[j];
         }
     }
+    return result;
+}
+
+
+/******************************************************************************
+ |  Realizuje mnozenie macierzy przez macierz.                                |
+ |  Argumenty:                                                                |
+ |      this - pierwszy skladnik mnozenia,                                    |
+ |      tmp - drugi skladnik mnozenia.                                        |
+ |  Zwraca:                                                                   |
+ |      Iloczyn dwoch skladnikow przekazanych jako macierz.                   |
+ */
+
+Matrix Matrix::operator * (Matrix tmp)  {
+    Matrix result;
+    for (int i = 0; i < SIZE; ++i){
+        for (int j = 0; j < SIZE; ++j){
+            for (int k = 0; k < SIZE; ++k){
+                result.value[i][j] += value[i][k] * tmp.value[k][j]; 
+            }   
+        }
+    }
+
     return result;
 }
 
@@ -148,7 +171,7 @@ const double &Matrix::operator () (unsigned int row, unsigned int column) const 
  |  Porównanie macierzy                                                       |
  |  Argumenty:                                                                |
  |      this -pierwszy składnik porównania                                    |
- |      v - drugi składnik porównania                                         |
+ |      mat - drugi składnik porównania                                         |
  |  Zwraca:                                                                   |
  |      1 - jeżeli te macierze są takie same                                  |
  |      0 - jeżeli te macierze są sobie różne                                 |    

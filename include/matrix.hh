@@ -23,6 +23,8 @@ public:
 
     Vector operator * (Vector tmp);           // Operator mnożenia przez wektor
 
+    Matrix operator * (Matrix tmp);           // Operator mnożenia przez macierz
+
     double  &operator () (unsigned int row, unsigned int column);
     
     const double &operator () (unsigned int row, unsigned int column) const;
